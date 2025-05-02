@@ -1,0 +1,126 @@
+<!-- OTP Verification Form -->
+<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
+    <h2 class="text-2xl font-merriweather text-navy font-bold mb-6 text-center">Verify OTP</h2>
+
+    <% if (locals.error) { %>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+            <span class="block sm:inline"><%= error %></span>
+        </div>
+    <% } %>
+
+    <div class="text-center mb-6">
+        <p class="text-gray-600">We've sent an OTP to</p>
+        <p class="text-gray-800 font-medium">+91 <%= phone %></p>
+    </div>
+
+    <form action="/auth/verify-otp" method="POST" class="space-y-6" id="otpForm">
+        <div>
+            <label for="otp" class="block text-gray-700 font-medium mb-2">Enter OTP</label>
+            <input type="text" id="otp" name="otp"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter 6-digit OTP"
+                maxlength="6"
+                pattern="\d{6}"
+                required
+                autocomplete="one-time-code">
+            
+            <% if (locals.demoOtp) { %>
+                <p class="mt-2 text-sm text-gray-500">Demo OTP: <%= demoOtp %></p>
+            <% } %>
+        </div>
+
+        <button type="submit"
+            class="w-full bg-blue-800 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            Verify OTP
+        </button>
+    </form>
+
+    <div class="mt-6 text-center">
+        <p class="text-gray-600">
+            Didn't receive the OTP?
+            <button type="button" id="resendOtp" class="text-blue-600 hover:underline ml-1">Resend OTP</button>
+        </p>
+        <div id="resendMessage" class="mt-2 text-sm text-green-600 hidden">
+            OTP has been resent successfully!
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const otpInput = document.getElementById('otp');
+    const otpForm = document.getElementById('otpForm');
+    const resendBtn = document.getElementById('resendOtp');
+    const resendMessage = document.getElementById('resendMessage');
+
+    // OTP input validation
+    otpInput.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 6);
+    });
+
+    // Form validation
+    otpForm.addEventListener('submit', function(e) {
+        const otp = otpInput.value.trim();
+        if (!/^\d{6}$/.test(otp)) {
+            e.preventDefault();
+            alert('Please enter a valid 6-digit OTP');
+        }
+    });
+
+    // Resend OTP functionality
+    let resendTimer;
+    resendBtn.addEventListener('click', async function() {
+        try {
+            resendBtn.disabled = true;
+            const response = await fetch('/auth/resend-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                resendMessage.textContent = 'OTP has been resent successfully!';
+                resendMessage.classList.remove('hidden');
+                
+                // Hide message after 3 seconds
+                setTimeout(() => {
+                    resendMessage.classList.add('hidden');
+                }, 3000);
+
+                // Disable resend button for 30 seconds
+                let timeLeft = 30;
+                resendBtn.textContent = `Resend OTP (${timeLeft}s)`;
+                
+                resendTimer = setInterval(() => {
+                    timeLeft--;
+                    if (timeLeft <= 0) {
+                        clearInterval(resendTimer);
+                        resendBtn.textContent = 'Resend OTP';
+                        resendBtn.disabled = false;
+                    } else {
+                        resendBtn.textContent = `Resend OTP (${timeLeft}s)`;
+                    }
+                }, 1000);
+            } else {
+                throw new Error(data.message || 'Failed to resend OTP');
+            }
+        } catch (error) {
+            console.error('Error resending OTP:', error);
+            resendMessage.textContent = 'Failed to resend OTP. Please try again.';
+            resendMessage.classList.remove('hidden');
+            resendMessage.classList.remove('text-green-600');
+            resendMessage.classList.add('text-red-600');
+            resendBtn.disabled = false;
+        }
+    });
+
+    // Clear timer on page unload
+    window.addEventListener('unload', () => {
+        if (resendTimer) {
+            clearInterval(resendTimer);
+        }
+    });
+});
+</script> 

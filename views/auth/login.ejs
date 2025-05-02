@@ -1,0 +1,162 @@
+<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
+    <h2 class="text-2xl font-merriweather text-navy font-bold mb-6 text-center">Login</h2>
+
+    <% if (locals.error) { %>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+            <span class="block sm:inline"><%= error %></span>
+        </div>
+    <% } %>
+
+    <form action="/auth/login" method="POST" class="space-y-6" id="loginForm">
+        <!-- Hidden input for login type with default value -->
+        <input type="hidden" id="loginType" name="loginType" value="aadhaar">
+
+        <!-- Aadhaar Field -->
+        <div id="aadhaarField">
+            <label for="aadhaar" class="block text-gray-700 font-medium mb-2">Aadhaar Number</label>
+            <input type="text" id="aadhaar" name="aadhaar"
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter 12-digit Aadhaar number"
+                maxlength="12">
+            <p class="mt-1 text-sm text-gray-500">Enter your 12-digit Aadhaar number</p>
+        </div>
+
+        <!-- Phone Field -->
+        <div id="phoneField">
+            <label for="phone" class="block text-gray-700 font-medium mb-2">Phone Number</label>
+            <div class="flex">
+                <span class="inline-flex items-center px-3 text-gray-500 bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg">
+                    +91
+                </span>
+                <input type="tel" id="phone" name="phone"
+                    class="w-full px-4 py-2 border border-l-0 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter 10-digit mobile number"
+                    maxlength="10">
+            </div>
+            <p class="mt-1 text-sm text-gray-500">Enter your registered mobile number</p>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit"
+            class="w-full bg-blue-800 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            Get OTP
+        </button>
+    </form>
+
+    <div class="mt-6 space-y-4">
+        <p class="text-center text-gray-600">
+            Don't have an account?
+            <a href="/auth/register" class="text-blue-600 hover:underline">Register here</a>
+        </p>
+        <div class="relative">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-2 bg-white text-gray-500">Or</span>
+            </div>
+        </div>
+        <div class="text-center">
+            <a href="/fir/anonymous" class="text-blue-600 hover:underline">
+                File FIR Anonymously
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get DOM elements
+    const loginForm = document.getElementById('loginForm');
+    const aadhaarInput = document.getElementById('aadhaar');
+    const phoneInput = document.getElementById('phone');
+    const loginType = document.getElementById('loginType');
+
+    // Set initial login type based on which field has a value
+    function updateLoginType() {
+        const aadhaarValue = aadhaarInput.value.trim();
+        const phoneValue = phoneInput.value.trim();
+
+        if (phoneValue) {
+            loginType.value = 'phone';
+            aadhaarInput.value = ''; // Clear Aadhaar if phone is filled
+        } else {
+            loginType.value = 'aadhaar';
+            // Don't clear phone here as we're just initializing
+        }
+    }
+
+    // Input validation for Aadhaar
+    aadhaarInput.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 12);
+        if (this.value) {
+            phoneInput.value = ''; // Clear phone when Aadhaar is being entered
+            loginType.value = 'aadhaar';
+        }
+        updateLoginType();
+    });
+
+    // Input validation for phone
+    phoneInput.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 10);
+        if (this.value) {
+            aadhaarInput.value = ''; // Clear Aadhaar when phone is being entered
+            loginType.value = 'phone';
+        }
+        updateLoginType();
+    });
+
+    // Form submission
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const aadhaarValue = aadhaarInput.value.trim();
+        const phoneValue = phoneInput.value.trim();
+
+        // Update login type before validation
+        updateLoginType();
+
+        // Check if at least one field is filled
+        if (!aadhaarValue && !phoneValue) {
+            alert('Please enter either Aadhaar number or phone number');
+            return;
+        }
+
+        // Validate based on login type
+        if (loginType.value === 'aadhaar') {
+            if (!/^\d{12}$/.test(aadhaarValue)) {
+                alert('Please enter a valid 12-digit Aadhaar number');
+                return;
+            }
+        } else if (loginType.value === 'phone') {
+            if (!/^\d{10}$/.test(phoneValue)) {
+                alert('Please enter a valid 10-digit phone number');
+                return;
+            }
+        }
+
+        console.log('Submitting form with:', {
+            loginType: loginType.value,
+            aadhaar: aadhaarValue,
+            phone: phoneValue
+        });
+
+        // If validation passes, submit the form
+        this.submit();
+    });
+
+    // Focus handlers
+    aadhaarInput.addEventListener('focus', function() {
+        phoneInput.value = '';
+        loginType.value = 'aadhaar';
+    });
+
+    phoneInput.addEventListener('focus', function() {
+        aadhaarInput.value = '';
+        loginType.value = 'phone';
+    });
+
+    // Initialize login type on page load
+    updateLoginType();
+});
+</script> 

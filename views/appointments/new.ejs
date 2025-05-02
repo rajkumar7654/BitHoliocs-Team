@@ -1,0 +1,141 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h4 mb-0">Book an Appointment</h2>
+                </div>
+                <div class="card-body">
+                    <% if (locals.error) { %>
+                        <div class="alert alert-danger" role="alert">
+                            <%= error %>
+                        </div>
+                    <% } %>
+
+                    <form action="/appointments/new" method="POST" class="needs-validation" novalidate>
+                        <!-- Purpose -->
+                        <div class="mb-3">
+                            <label for="purpose" class="form-label">Purpose of Visit*</label>
+                            <select class="form-select" id="purpose" name="purpose" required>
+                                <option value="">Select purpose</option>
+                                <option value="General Inquiry">General Inquiry</option>
+                                <option value="Document Verification">Document Verification</option>
+                                <option value="Statement Recording">Statement Recording</option>
+                                <option value="Case Follow-up">Case Follow-up</option>
+                                <option value="Evidence Submission">Evidence Submission</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a purpose for your visit.
+                            </div>
+                        </div>
+
+                        <!-- Preferred Date -->
+                        <div class="mb-3">
+                            <label for="preferredDate" class="form-label">Preferred Date*</label>
+                            <input type="date" 
+                                   class="form-control" 
+                                   id="preferredDate" 
+                                   name="preferredDate"
+                                   min="<%= new Date().toISOString().split('T')[0] %>"
+                                   required>
+                            <div class="invalid-feedback">
+                                Please select a valid date.
+                            </div>
+                        </div>
+
+                        <!-- Preferred Time -->
+                        <div class="mb-3">
+                            <label for="preferredTime" class="form-label">Preferred Time*</label>
+                            <select class="form-select" id="preferredTime" name="preferredTime" required>
+                                <option value="">Select time slot</option>
+                                <option value="09:00">09:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="12:00">12:00 PM</option>
+                                <option value="14:00">02:00 PM</option>
+                                <option value="15:00">03:00 PM</option>
+                                <option value="16:00">04:00 PM</option>
+                                <option value="17:00">05:00 PM</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a time slot.
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Additional Details</label>
+                            <textarea class="form-control" 
+                                      id="description" 
+                                      name="description" 
+                                      rows="3"
+                                      placeholder="Please provide any additional details about your visit"></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                Book Appointment
+                            </button>
+                            <a href="/dashboard" class="btn btn-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Information Card -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">Important Information</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="mb-0">
+                        <li>Appointments are available Monday to Friday</li>
+                        <li>Morning slots: 9 AM to 12 PM</li>
+                        <li>Afternoon slots: 2 PM to 5 PM</li>
+                        <li>Please arrive 15 minutes before your scheduled time</li>
+                        <li>Bring relevant documents and ID proof</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Form validation
+(function () {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+
+    // Set minimum date to today
+    const dateInput = document.getElementById('preferredDate')
+    const today = new Date().toISOString().split('T')[0]
+    dateInput.setAttribute('min', today)
+
+    // Disable weekends
+    dateInput.addEventListener('input', function(e) {
+        const selected = new Date(this.value)
+        if(selected.getDay() === 0 || selected.getDay() === 6) {
+            this.setCustomValidity('Please select a weekday')
+        } else {
+            this.setCustomValidity('')
+        }
+    })
+})()
+</script>
+
+<%- include('../partials/footer') %> 

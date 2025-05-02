@@ -1,0 +1,286 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section with enhanced styling -->
+<div class="relative overflow-hidden bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white">
+    <!-- Animated background pattern -->
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');">
+        </div>
+    </div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="text-center">
+            <!-- Animated badge -->
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-700 bg-opacity-50 backdrop-blur-sm mb-6 transform hover:scale-105 transition-transform duration-300">
+                <span class="animate-pulse inline-block w-2 h-2 rounded-full bg-blue-400 mr-2"></span>
+                <span class="text-sm font-medium text-blue-100">Help Center</span>
+            </div>
+
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-100 via-white to-blue-100">
+                    Frequently Asked Questions
+                </span>
+            </h1>
+            <p class="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                Find quick answers to common questions about our Virtual Police Station services
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Categories -->
+<div class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- General Questions -->
+            <div class="bg-white rounded-xl shadow-lg p-6 transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="bg-blue-100 rounded-full p-3">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">General Questions</h3>
+                </div>
+                <div class="space-y-4" id="general-faqs">
+                    <!-- FAQ items will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <!-- Account & Security -->
+            <div class="bg-white rounded-xl shadow-lg p-6 transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="bg-green-100 rounded-full p-3">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">Account & Security</h3>
+                </div>
+                <div class="space-y-4" id="security-faqs">
+                    <!-- FAQ items will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <!-- Services & Support -->
+            <div class="bg-white rounded-xl shadow-lg p-6 transform hover:scale-105 transition-all duration-300">
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="bg-purple-100 rounded-full p-3">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">Services & Support</h3>
+                </div>
+                <div class="space-y-4" id="services-faqs">
+                    <!-- FAQ items will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Accordion Section -->
+<div class="max-w-4xl mx-auto px-4 py-16">
+    <div class="space-y-6">
+        <!-- FAQ Items -->
+        <div class="faq-item bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <button class="w-full px-6 py-4 text-left focus:outline-none focus:bg-gray-50 hover:bg-gray-50 transition-colors duration-300">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">How do I file an FIR online?</h3>
+                    <svg class="w-5 h-5 text-gray-500 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+            </button>
+            <div class="faq-answer px-6 py-4 bg-gray-50 hidden">
+                <p class="text-gray-700">To file an FIR online:</p>
+                <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-600">
+                    <li>Log in to your account</li>
+                    <li>Navigate to the 'File FIR' section</li>
+                    <li>Fill out the required incident details</li>
+                    <li>Upload any supporting documents</li>
+                    <li>Submit the form</li>
+                </ol>
+                <p class="mt-3 text-gray-700">You'll receive a confirmation number for tracking your FIR status.</p>
+            </div>
+        </div>
+
+        <!-- Add more FAQ items following the same pattern -->
+    </div>
+</div>
+
+<!-- Feedback Section with Enhanced Styling -->
+<div class="bg-gradient-to-b from-gray-50 to-white py-16">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Still have questions?</h2>
+                <p class="text-gray-600">Can't find what you're looking for? Please tell us how we can help.</p>
+            </div>
+
+            <form id="feedbackForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="relative">
+                        <input type="text" id="name" name="name" required
+                            class="peer w-full px-4 py-3 rounded-lg border border-gray-300 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <label for="name" 
+                            class="absolute left-4 -top-2.5 bg-white px-1 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-600">
+                            Your Name
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input type="email" id="email" name="email" required
+                            class="peer w-full px-4 py-3 rounded-lg border border-gray-300 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <label for="email"
+                            class="absolute left-4 -top-2.5 bg-white px-1 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-600">
+                            Email Address
+                        </label>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <input type="text" id="subject" name="subject" required
+                        class="peer w-full px-4 py-3 rounded-lg border border-gray-300 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <label for="subject"
+                        class="absolute left-4 -top-2.5 bg-white px-1 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-600">
+                        Subject
+                    </label>
+                </div>
+
+                <div class="relative">
+                    <textarea id="message" name="message" rows="4" required
+                        class="peer w-full px-4 py-3 rounded-lg border border-gray-300 placeholder-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    <label for="message"
+                        class="absolute left-4 -top-2.5 bg-white px-1 text-sm text-gray-600 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-600">
+                        Your Message
+                    </label>
+                </div>
+
+                <div class="flex justify-center">
+                    <button type="submit"
+                        class="inline-flex items-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-105 transition-all duration-300">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                        </svg>
+                        Send Message
+                    </button>
+                </div>
+            </form>
+
+            <div id="alertMessage" class="mt-6 hidden rounded-lg p-4 text-center"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+// FAQ Accordion functionality
+document.querySelectorAll('.faq-item button').forEach(button => {
+    button.addEventListener('click', () => {
+        const answer = button.nextElementSibling;
+        const icon = button.querySelector('svg');
+        
+        // Toggle answer visibility
+        answer.classList.toggle('hidden');
+        
+        // Rotate icon
+        icon.style.transform = answer.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+    });
+});
+
+// Search functionality
+document.getElementById('faq-search').addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    document.querySelectorAll('.faq-item').forEach(item => {
+        const question = item.querySelector('h3').textContent.toLowerCase();
+        const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+        
+        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+});
+
+// Form submission handling
+document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const alertDiv = document.getElementById('alertMessage');
+    const form = e.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    
+    // Validate form
+    const formData = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        subject: form.subject.value.trim(),
+        message: form.message.value.trim()
+    };
+
+    // Check if any field is empty
+    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+        alertDiv.className = 'mt-6 bg-red-100 text-red-700 rounded-lg p-4 text-center';
+        alertDiv.textContent = 'Please fill in all fields';
+        alertDiv.classList.remove('hidden');
+        return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+        alertDiv.className = 'mt-6 bg-red-100 text-red-700 rounded-lg p-4 text-center';
+        alertDiv.textContent = 'Please enter a valid email address';
+        alertDiv.classList.remove('hidden');
+        return;
+    }
+    
+    // Disable submit button and show loading state
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Sending...';
+    
+    try {
+        const response = await fetch('/questions/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alertDiv.className = 'mt-6 bg-green-100 text-green-700 rounded-lg p-4 text-center';
+            alertDiv.textContent = data.message;
+            form.reset();
+        } else {
+            throw new Error(data.message || 'Failed to submit question');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alertDiv.className = 'mt-6 bg-red-100 text-red-700 rounded-lg p-4 text-center';
+        alertDiv.textContent = error.message || 'An error occurred. Please try again.';
+    } finally {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>Send Message';
+        
+        // Show alert
+        alertDiv.classList.remove('hidden');
+        
+        // Hide alert after 5 seconds
+        setTimeout(() => {
+            alertDiv.classList.add('hidden');
+        }, 5000);
+    }
+});
+</script>
+
+<%- include('partials/footer') %> 

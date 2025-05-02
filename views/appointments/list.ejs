@@ -1,0 +1,138 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>My Appointments</h1>
+                <a href="/appointments/new" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Book New Appointment
+                </a>
+            </div>
+
+            <% if (locals.error) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <!-- Appointment Statistics -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title">Total Appointments</h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h2 class="mb-0"><%= stats.total %></h2>
+                                <i class="fas fa-calendar-check text-primary fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title">Upcoming Appointments</h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h2 class="mb-0"><%= stats.upcoming %></h2>
+                                <i class="fas fa-clock text-warning fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title">Completed Appointments</h5>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h2 class="mb-0"><%= stats.completed %></h2>
+                                <i class="fas fa-check-circle text-success fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Summary -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Appointment Status Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Pending</span>
+                                <span class="badge bg-warning"><%= stats.pending %></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Scheduled</span>
+                                <span class="badge bg-info"><%= stats.scheduled %></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span>Rescheduled</span>
+                                <span class="badge bg-primary"><%= stats.rescheduled %></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% if (appointments && appointments.length > 0) { %>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Purpose</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% appointments.forEach(appointment => { %>
+                                <tr>
+                                    <td><%= new Date(appointment.preferredDate).toLocaleDateString() %></td>
+                                    <td><%= appointment.preferredTime %></td>
+                                    <td><%= appointment.purpose %></td>
+                                    <td>
+                                        <span class="badge bg-<%= 
+                                            appointment.status === 'Pending' ? 'warning' :
+                                            appointment.status === 'Confirmed' ? 'success' :
+                                            appointment.status === 'Cancelled' ? 'danger' :
+                                            'secondary'
+                                        %>">
+                                            <%= appointment.status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="/appointments/<%= appointment._id %>" class="btn btn-sm btn-info">
+                                            View Details
+                                        </a>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h3 class="h5 mb-3">No Appointments Found</h3>
+                        <p class="text-muted">You haven't booked any appointments yet.</p>
+                        <a href="/appointments/new" class="btn btn-primary">
+                            Book Your First Appointment
+                        </a>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %> 

@@ -1,0 +1,82 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h4 mb-0">Track FIR Status</h2>
+                </div>
+                <div class="card-body">
+                    <% if (locals.error) { %>
+                        <div class="alert alert-danger" role="alert">
+                            <%= error %>
+                        </div>
+                    <% } %>
+
+                    <form action="/fir/track" method="POST" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label for="firNumber" class="form-label">FIR Number</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="firNumber" 
+                                   name="firNumber" 
+                                   placeholder="Enter FIR number (e.g., FIR2024000001)"
+                                   pattern="FIR\d{10}"
+                                   required>
+                            <div class="form-text text-muted">
+                                Enter the 14-digit FIR number provided to you when filing the FIR.
+                            </div>
+                            <div class="invalid-feedback">
+                                Please enter a valid FIR number.
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                Track FIR
+                            </button>
+                            <a href="/" class="btn btn-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="h5 mb-0">Need Help?</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="h6">Where to find your FIR number?</h4>
+                    <ul class="mb-0">
+                        <li>The FIR number was provided to you when you filed the FIR</li>
+                        <li>It's also included in the acknowledgment receipt</li>
+                        <li>Format: FIR + Year + 6-digit number (e.g., FIR2024000001)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Form validation
+(function () {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+
+<%- include('../partials/footer') %> 

@@ -1,0 +1,93 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h2 class="h4 mb-0">Appointment Details</h2>
+                    <span class="badge bg-<%= 
+                        appointment.status === 'Pending' ? 'warning' :
+                        appointment.status === 'Confirmed' ? 'success' :
+                        appointment.status === 'Cancelled' ? 'danger' :
+                        'secondary'
+                    %>">
+                        <%= appointment.status %>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-2">Appointment Information</h5>
+                            <p><strong>Purpose:</strong> <%= appointment.purpose %></p>
+                            <p><strong>Date:</strong> <%= new Date(appointment.preferredDate).toLocaleDateString() %></p>
+                            <p><strong>Time:</strong> <%= appointment.preferredTime %></p>
+                            <% if (appointment.description) { %>
+                                <p><strong>Additional Details:</strong><br><%= appointment.description %></p>
+                            <% } %>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-muted mb-2">Contact Information</h5>
+                            <p><strong>Name:</strong> <%= user.name %></p>
+                            <p><strong>Phone:</strong> <%= user.phone %></p>
+                        </div>
+                    </div>
+
+                    <% if (appointment.status === 'Confirmed') { %>
+                        <div class="alert alert-success" role="alert">
+                            <h5 class="alert-heading">Appointment Confirmed!</h5>
+                            <p class="mb-0">Please arrive 15 minutes before your scheduled time. Don't forget to bring your ID proof and relevant documents.</p>
+                        </div>
+                    <% } else if (appointment.status === 'Pending') { %>
+                        <div class="alert alert-warning" role="alert">
+                            <h5 class="alert-heading">Pending Confirmation</h5>
+                            <p class="mb-0">Your appointment request is being reviewed. We will notify you once it's confirmed.</p>
+                        </div>
+                    <% } else if (appointment.status === 'Cancelled') { %>
+                        <div class="alert alert-danger" role="alert">
+                            <h5 class="alert-heading">Appointment Cancelled</h5>
+                            <p class="mb-0">This appointment has been cancelled. Please book a new appointment if needed.</p>
+                        </div>
+                    <% } %>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="/appointments" class="btn btn-secondary">
+                            Back to Appointments
+                        </a>
+                        <% if (appointment.status === 'Pending') { %>
+                            <button class="btn btn-danger" onclick="cancelAppointment('<%= appointment._id %>')">
+                                Cancel Appointment
+                            </button>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function cancelAppointment(appointmentId) {
+    if (confirm('Are you sure you want to cancel this appointment?')) {
+        try {
+            const response = await fetch(`/appointments/${appointmentId}/cancel`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Failed to cancel appointment. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        }
+    }
+}
+</script>
+
+<%- include('../partials/footer') %> 

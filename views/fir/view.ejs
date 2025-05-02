@@ -1,0 +1,245 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>FIR Details</h1>
+                <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>FIR Number:</strong> <%= fir.firNumber %>
+                <br>
+                <strong>Status:</strong> 
+                <span class="badge bg-<%= fir.status === 'Pending' ? 'warning' : 
+                    fir.status === 'Under Review' ? 'info' :
+                    fir.status === 'Investigation' ? 'primary' :
+                    fir.status === 'Closed' ? 'success' : 'danger' %>">
+                    <%= fir.status %>
+                </span>
+            </div>
+
+            <!-- Complainant Details -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Complainant Details</h5>
+                </div>
+                <div class="card-body">
+                    <% if (fir.isAnonymous) { %>
+                        <p class="text-muted">This FIR was filed anonymously</p>
+                    <% } else { %>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Name:</strong> <%= fir.complainantDetails.name %></p>
+                                <p><strong>Phone:</strong> <%= fir.complainantDetails.phone %></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Address:</strong></p>
+                                <address>
+                                    <%= fir.complainantDetails.address.street %><br>
+                                    <%= fir.complainantDetails.address.city %>, 
+                                    <%= fir.complainantDetails.address.state %><br>
+                                    <%= fir.complainantDetails.address.pincode %>
+                                </address>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Incident Details -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Incident Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Type:</strong> <%= fir.firType %></p>
+                            <p><strong>Date:</strong> <%= new Date(fir.incidentDetails.date).toLocaleDateString() %></p>
+                            <p><strong>Time:</strong> <%= fir.incidentDetails.time || 'Not specified' %></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Location:</strong> <%= fir.incidentDetails.location.address %></p>
+                            <% if (fir.incidentDetails.location.coordinates[0] !== 0 || fir.incidentDetails.location.coordinates[1] !== 0) { %>
+                                <p>
+                                    <strong>Coordinates:</strong> 
+                                    <%= fir.incidentDetails.location.coordinates[1] %>, 
+                                    <%= fir.incidentDetails.location.coordinates[0] %>
+                                </p>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p><strong>Description:</strong></p>
+                        <p class="text-justify"><%= fir.incidentDetails.description %></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evidence -->
+            <% if (fir.evidence && fir.evidence.length > 0) { %>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Evidence</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <% fir.evidence.forEach((item, index) => { %>
+                                <div class="col-md-6 mb-4">
+                                    <div class="border rounded p-3">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <div>
+                                                <span class="badge bg-primary"><%= item.type %></span>
+                                                <% if (item.description) { %>
+                                                    <p class="mt-2 mb-1"><%= item.description %></p>
+                                                <% } %>
+                                            </div>
+                                            <small class="text-muted">
+                                                <%= new Date(item.uploadedAt).toLocaleDateString() %>
+                                            </small>
+                                        </div>
+                                        
+                                        <div class="evidence-preview mt-2">
+                                            <% if (item.type === 'Image') { %>
+                                                <img src="<%= item.path %>" 
+                                                     class="img-fluid rounded" 
+                                                     alt="Evidence Image"
+                                                     style="max-height: 200px; width: auto;">
+                                            <% } else if (item.type === 'Video') { %>
+                                                <video controls class="w-100 rounded">
+                                                    <source src="<%= item.path %>" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            <% } else if (item.type === 'Audio') { %>
+                                                <audio controls class="w-100">
+                                                    <source src="<%= item.path %>" type="audio/mpeg">
+                                                    Your browser does not support the audio tag.
+                                                </audio>
+                                            <% } else { %>
+                                                <a href="<%= item.path %>" 
+                                                   class="btn btn-outline-primary" 
+                                                   target="_blank">
+                                                    <i class="fas fa-file-download me-2"></i>
+                                                    View Document
+                                                </a>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Witnesses -->
+            <% if (fir.witnesses && fir.witnesses.length > 0) { %>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Witness Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Statement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% fir.witnesses.forEach(witness => { %>
+                                        <tr>
+                                            <td><%= witness.name %></td>
+                                            <td><%= witness.phone %></td>
+                                            <td><%= witness.statement %></td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Case Progress -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Case Progress</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <% fir.statusHistory.forEach((history, index) => { %>
+                            <div class="timeline-item">
+                                <div class="timeline-date">
+                                    <%= new Date(history.updatedAt).toLocaleString() %>
+                                </div>
+                                <div class="timeline-content">
+                                    <p><strong>Status:</strong> <%= history.status %></p>
+                                    <% if (history.remarks) { %>
+                                        <p><strong>Remarks:</strong> <%= history.remarks %></p>
+                                    <% } %>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+
+            <% if (fir.assignedOfficer) { %>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Assigned Officer</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Name:</strong> <%= fir.assignedOfficer.name %></p>
+                        <p><strong>Badge Number:</strong> <%= fir.assignedOfficer.badge %></p>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding: 20px 0;
+}
+
+.timeline-item {
+    padding: 20px 30px;
+    border-left: 2px solid #dee2e6;
+    position: relative;
+    margin-left: 20px;
+}
+
+.timeline-item:before {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: 28px;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #007bff;
+    background: #fff;
+    border-radius: 50%;
+}
+
+.timeline-date {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.timeline-content {
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+</style>
+
+<%- include('../partials/footer') %> 
